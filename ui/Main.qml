@@ -48,7 +48,7 @@ Mycroft.DelegateBase {
     }
     
     ColumnLayout {
-        anchors.top: headerImg.bottom
+        anchors.top: root.width > root.switchWidth ? headerImg.bottom : parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -62,8 +62,8 @@ Mycroft.DelegateBase {
             Image {
                 id: img
                 fillMode: Image.PreserveAspectCrop
-                Layout.preferredWidth: root.width > root.switchWidth ? Kirigami.Units.gridUnit * 10 : Kirigami.Units.gridUnit * 6
-                Layout.preferredHeight: root.width > root.switchWidth ? Kirigami.Units.gridUnit * 10 : Kirigami.Units.gridUnit * 6
+                Layout.preferredWidth: root.width > root.switchWidth ? Kirigami.Units.gridUnit * 10 : Kirigami.Units.gridUnit * 5
+                Layout.preferredHeight: root.width > root.switchWidth ? Kirigami.Units.gridUnit * 10 : Kirigami.Units.gridUnit * 5
                 source: albumimage
             }
 
@@ -75,7 +75,7 @@ Mycroft.DelegateBase {
                 Kirigami.Heading {
                     id: songtitle
                     text: title
-                    level: 1
+                    level: root.width > root.switchWidth ? 1 : 3
                     Layout.fillWidth: true
                     font.capitalization: Font.Capitalize
                 }
