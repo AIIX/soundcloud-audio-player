@@ -87,19 +87,19 @@ class SoundcloudSkill(MycroftSkill):
                 audio_title = info_dict.get('title', None)
                 audio_thumb = info_dict.get('thumbnail', None)
             print(audio_url, audio_title, audio_thumb)
-            #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("none")}))
+            #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("play")}))
             self.gui.clear()
             self.gui["audioTitle"] = str(audio_title)
             self.gui["audioSource"] = str(audio_url)
             self.gui["audioThumbnail"] = str(audio_thumb)
-            self.gui["status"] = str("none")
+            self.gui["status"] = str("play")
             self.gui.show_page("SoundCloudPlayer.qml")
         
     def soundcloudpause(self, message):
         self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "status": str("pause")}))
 
     def soundcloudresume(self, message):
-        self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "status": str("resume")}))
+        self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "status": str("play")}))
         
     def soundcloudnext(self, message):
         global soundlst
@@ -119,12 +119,12 @@ class SoundcloudSkill(MycroftSkill):
                 audio_title = info_dict.get('title', None)
                 audio_thumb = info_dict.get('thumbnail', None)
         print(audio_url, audio_title, audio_thumb)
-        #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("none")}))
+        #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("play")}))
         #self.gui.clear()
         self.gui["audioTitle"] = str(audio_title)
         self.gui["audioSource"] = str(audio_url)
         self.gui["audioThumbnail"] = str(audio_thumb)
-        self.gui["status"] = str("none")
+        self.gui["status"] = str("play")
         self.gui.show_page("SoundCloudPlayer.qml")
         
         
@@ -146,12 +146,12 @@ class SoundcloudSkill(MycroftSkill):
             audio_title = info_dict.get('title', None)
             audio_thumb = info_dict.get('thumbnail', None)
         print(audio_url, audio_title, audio_thumb)
-        #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("none")}))
+        #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("play")}))
         #self.gui.clear()
         self.gui["audioTitle"] = str(audio_title)
         self.gui["audioSource"] = str(audio_url)
         self.gui["audioThumbnail"] = str(audio_thumb)
-        self.gui["status"] = str("none")
+        self.gui["status"] = str("play")
         self.gui.show_page("SoundCloudPlayer.qml")
 
 
