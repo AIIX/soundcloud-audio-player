@@ -5,20 +5,25 @@ import requests
 from os.path import dirname
 import sys
 import youtube_dl
+import json
 from adapt.intent import IntentBuilder
 from bs4 import BeautifulSoup
 from mycroft.skills.core import MycroftSkill
 from mycroft.messagebus.message import Message
+import threading
 import collections
 
 __author__ = 'aix'
+searchlst = {}
 soundlst = []
+searchlstobject = []
 current_song = ""
  
 class SoundcloudSkill(MycroftSkill):
     def __init__(self):
         super(SoundcloudSkill, self).__init__(name="SoundcloudSkill")
         self.process = None
+        self.genMusicSearchList = None
 
     def initialize(self):
         self.load_data_files(dirname(__file__))
@@ -45,12 +50,13 @@ class SoundcloudSkill(MycroftSkill):
         
         self.gui.register_handler('aiix.soundcloud-audio-player.next', self.soundcloudnext)
         self.gui.register_handler('aiix.soundcloud-audio-player.previous', self.soundcloudprevious)
+        self.gui.register_handler('aiix.soundcloud-audio-player.playtitle', self.soundplayselection)
         
     def search(self, text):
         global soundlst
         global current_song
         query = text
-        url = "https://soundcloud.com/search?q=" + query
+        url = "https://soundcloud.com/search/sounds?q=" + query
         response = requests.get(url)
         soup = BeautifulSoup(response.content, 'html.parser')
         for link in soup.find_all('h2'):
@@ -59,11 +65,12 @@ class SoundcloudSkill(MycroftSkill):
                countOfWords = collections.Counter(r)
                result = [i for i in countOfWords if countOfWords[i]>1]
                if "/" in result:
-                 soundlst.append(x.get('href'))
+                 soundlst.append("https://soundcloud.com" + x.get('href'))
         
         if len(soundlst) != 0:
-            current_song = soundlst[0]
-            genMusicUrl = "https://soundcloud.com" + current_song
+            genMusicUrl = soundlst[0]
+            self.genMusicSearchList = threading.Thread(target=self.getSearchListInfo, args=[soundlst])
+            self.genMusicSearchList.start()
             return genMusicUrl
         else:
             self.speak("No Song Found")
@@ -87,13 +94,13 @@ class SoundcloudSkill(MycroftSkill):
                 audio_title = info_dict.get('title', None)
                 audio_thumb = info_dict.get('thumbnail', None)
             print(audio_url, audio_title, audio_thumb)
-            #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("play")}))
             self.gui.clear()
             self.gui["audioTitle"] = str(audio_title)
             self.gui["audioSource"] = str(audio_url)
             self.gui["audioThumbnail"] = str(audio_thumb)
+            self.gui["scSearchBlob"] = {} 
             self.gui["status"] = str("play")
-            self.gui.show_page("SoundCloudPlayer.qml")
+            self.gui.show_pages(["SoundCloudPlayer.qml", "SoundcloudSearch.qml"], 0, override_idle=True)
         
     def soundcloudpause(self, message):
         self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "status": str("pause")}))
@@ -119,11 +126,10 @@ class SoundcloudSkill(MycroftSkill):
                 audio_title = info_dict.get('title', None)
                 audio_thumb = info_dict.get('thumbnail', None)
         print(audio_url, audio_title, audio_thumb)
-        #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("play")}))
-        #self.gui.clear()
         self.gui["audioTitle"] = str(audio_title)
         self.gui["audioSource"] = str(audio_url)
         self.gui["audioThumbnail"] = str(audio_thumb)
+        self.gui["scSearchBlob"] = {} 
         self.gui["status"] = str("play")
         self.gui.show_page("SoundCloudPlayer.qml")
         
@@ -146,14 +152,52 @@ class SoundcloudSkill(MycroftSkill):
             audio_title = info_dict.get('title', None)
             audio_thumb = info_dict.get('thumbnail', None)
         print(audio_url, audio_title, audio_thumb)
-        #self.enclosure.bus.emit(Message("metadata", {"type": "soundcloud-audio-player", "title": str(audio_title), "stream": str(audio_url), "albumimage": str(audio_thumb), "status": str("play")}))
-        #self.gui.clear()
         self.gui["audioTitle"] = str(audio_title)
         self.gui["audioSource"] = str(audio_url)
         self.gui["audioThumbnail"] = str(audio_thumb)
+        self.gui["scSearchBlob"] = {} 
         self.gui["status"] = str("play")
         self.gui.show_page("SoundCloudPlayer.qml")
 
+    def getSearchListInfo(self, soundlst):
+        global searchlst
+        global searchlstobject
+        ydl_opts = {}
+        ydl = youtube_dl.YoutubeDL(ydl_opts)
+        searchlstobject.clear();
+        for x in range(len(soundlst)):
+            info_dict = ydl.extract_info(soundlst[x], download=False)
+            searchlstobject.append({"title": info_dict.get("title", None), "url": info_dict.get("url", None), "thumbnail": info_dict.get("thumbnail", None)})
+            result = json.dumps(searchlstobject)
+            self.gui["scSearchBlob"] = result
+            
+        if self.genMusicSearchList is not None:
+            sys.exit()
+        else:
+            print("process is None")
+            
+    def soundplayselection(self, message):
+        self.stop()
+        global soundlst
+        global current_song
+        soundlst.clear()
+        utterance = message.data["playtitle"].lower()
+        aud = self.search(utterance)
+        urlvideo = aud
+        if urlvideo is not False:
+            ydl_opts = {}
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                info_dict = ydl.extract_info(urlvideo, download=False)
+                audio_url = info_dict.get("url", None)
+                audio_title = info_dict.get('title', None)
+                audio_thumb = info_dict.get('thumbnail', None)
+            print(audio_url, audio_title, audio_thumb)
+            self.gui["audioTitle"] = str(audio_title)
+            self.gui["audioSource"] = str(audio_url)
+            self.gui["audioThumbnail"] = str(audio_thumb)
+            self.gui["scSearchBlob"] = {} 
+            self.gui["status"] = str("play")
+            self.gui.show_pages(["SoundCloudPlayer.qml", "SoundcloudSearch.qml"], 0, override_idle=True)
 
     def stop(self):
         self.enclosure.bus.emit(Message("metadata", {"type": "stop"}))
