@@ -43,6 +43,7 @@ Mycroft.ScrollableDelegate {
             contentItem: Item {
                 implicitWidth: parent.implicitWidth
                 implicitHeight: parent.implicitHeight
+                z: 1000
 
                 RowLayout {
                     id: delegateItem
@@ -75,7 +76,7 @@ Mycroft.ScrollableDelegate {
                 }
             }
                 onClicked: {
-                    triggerEvent("aiix.soundcloud-audio-player.playtitle", {playtitle: modelData.title})
+                    triggerGuiEvent("aiix.soundcloud-audio-player.playtitle", {playtitle: modelData.title})
             }
         }
     }
