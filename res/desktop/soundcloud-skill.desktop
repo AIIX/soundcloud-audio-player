@@ -1,0 +1,22 @@
+[Desktop Entry]
+Categories=VoiceApp
+Comment[en_IN]=
+Comment=
+Exec=mycroft-gui-app --hideTextInput --skill=soundcloud-audio-player.aiix.home
+GenericName[en_IN]=
+GenericName=
+Icon=audio-radio
+MimeType=
+Name[en_IN]=Soundcloud
+Name=Soundcloud
+Path=
+StartupNotify=false
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=1.0
+X-DBUS-ServiceName=
+X-DBUS-StartupType=none
+X-KDE-StartupNotify=false
+X-KDE-SubstituteUID=false
+X-KDE-Username=

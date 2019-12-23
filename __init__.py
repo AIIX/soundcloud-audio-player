@@ -27,6 +27,8 @@ class SoundcloudSkill(MycroftSkill):
 
     def initialize(self):
         self.load_data_files(dirname(__file__))
+        
+        self.add_event('soundcloud-audio-player.aiix.home', self.showHome)
 
         soundcloud = IntentBuilder("SoundcloudKeyword"). \
             require("SoundcloudKeyword").build()
@@ -51,6 +53,14 @@ class SoundcloudSkill(MycroftSkill):
         self.gui.register_handler('aiix.soundcloud-audio-player.next', self.soundcloudnext)
         self.gui.register_handler('aiix.soundcloud-audio-player.previous', self.soundcloudprevious)
         self.gui.register_handler('aiix.soundcloud-audio-player.playtitle', self.soundplayselection)
+
+    def showHome(self, message):
+        self.gui.clear()
+        self.enclosure.display_manager.remove_active()
+        self.displayHome()
+        
+    def displayHome(self):
+        self.gui.show_page("homepage.qml")
         
     def search(self, text):
         global soundlst
