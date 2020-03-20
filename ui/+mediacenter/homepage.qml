@@ -17,11 +17,11 @@ Mycroft.Delegate {
         
         ListModel {
             id: sampleModel
-            ListElement {example: "soundcloud metallica"}
-            ListElement {example: "Soundcloud electronic dance music"}
-            ListElement {example: "soundcloud groove podcast"}
-            ListElement {example: "pause soundcloud"}
-            ListElement {example: "resume soundcloud"}
+            ListElement {example: "soundcloud metallica", title: "metallica"}
+            ListElement {example: "soundcloud electronic dance music", title: "electronic dance music"}
+            ListElement {example: "soundcloud groove podcast", title: "groove podcast"}
+            ListElement {example: "soundcloud ambient music", title: "ambient"}
+            ListElement {example: "soundcloud jazz", title: "jazz"}
         }
 
         Rectangle {
@@ -88,6 +88,9 @@ Mycroft.Delegate {
                         id: rootCard
                         reserveSpaceForIcon: false
                         label: "Hey Mycroft, " + model.example
+                        onClicked: {
+                            triggerGuiEvent("aiix.soundcloud-audio-player.playtitle", {"playtitle": model.title})
+                        }
                     }
                 }
             }
