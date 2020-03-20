@@ -107,6 +107,9 @@ Mycroft.Delegate {
                         onClicked: {
                             triggerGuiEvent("aiix.soundcloud-audio-player.playtitle", {"playtitle": model.title})
                         }
+                        Keys.onReturnPressed: {
+                            clicked()
+                        }
                     }
                 }
             }
