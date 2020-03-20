@@ -17,11 +17,27 @@ Mycroft.Delegate {
         
         ListModel {
             id: sampleModel
-            ListElement {example: "soundcloud metallica", title: "metallica"}
-            ListElement {example: "soundcloud electronic dance music", title: "electronic dance music"}
-            ListElement {example: "soundcloud groove podcast", title: "groove podcast"}
-            ListElement {example: "soundcloud ambient music", title: "ambient"}
-            ListElement {example: "soundcloud jazz", title: "jazz"}
+            
+            ListElement {
+                example: "soundcloud metallica"
+                title: "metallica"
+            }
+            ListElement {
+                example: "soundcloud electronic dance music" 
+                title: "electronic dance music"
+            }
+            ListElement {
+                example: "soundcloud groove podcast" 
+                title: "groove podcast"
+            }
+            ListElement {
+                example: "soundcloud ambient music"
+                title: "ambient"
+            }
+            ListElement {
+                example: "soundcloud jazz" 
+                title: "jazz"
+            }
         }
 
         Rectangle {
