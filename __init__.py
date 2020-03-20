@@ -110,6 +110,8 @@ class SoundcloudSkill(MycroftSkill):
             self.gui["audioThumbnail"] = str(audio_thumb)
             self.gui["scSearchBlob"] = {} 
             self.gui["status"] = str("play")
+            current_song = urlvideo
+            print(current_song)
             self.gui.show_pages(["SoundCloudPlayer.qml", "SoundcloudSearch.qml"], 0, override_idle=True)
         
     def soundcloudpause(self, message):
@@ -128,7 +130,7 @@ class SoundcloudSkill(MycroftSkill):
             current_song = soundlst[current_index+1]
             print(current_song)
                 
-        urlvideo = "https://soundcloud.com" + current_song
+        urlvideo = current_song
         ydl_opts = {}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 info_dict = ydl.extract_info(urlvideo, download=False)
@@ -141,6 +143,8 @@ class SoundcloudSkill(MycroftSkill):
         self.gui["audioThumbnail"] = str(audio_thumb)
         self.gui["scSearchBlob"] = {} 
         self.gui["status"] = str("play")
+        current_song = urlvideo
+        print(current_song)
         self.gui.show_page("SoundCloudPlayer.qml")
         
         
@@ -154,7 +158,7 @@ class SoundcloudSkill(MycroftSkill):
             current_song = soundlst[current_index - 1]
             print(current_song)
                 
-        urlvideo = "https://soundcloud.com" + current_song
+        urlvideo = current_song
         ydl_opts = {}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(urlvideo, download=False)
@@ -167,6 +171,8 @@ class SoundcloudSkill(MycroftSkill):
         self.gui["audioThumbnail"] = str(audio_thumb)
         self.gui["scSearchBlob"] = {} 
         self.gui["status"] = str("play")
+        current_song = urlvideo
+        print(current_song)
         self.gui.show_page("SoundCloudPlayer.qml")
 
     def getSearchListInfo(self, soundlst):
@@ -207,6 +213,8 @@ class SoundcloudSkill(MycroftSkill):
             self.gui["audioThumbnail"] = str(audio_thumb)
             self.gui["scSearchBlob"] = {} 
             self.gui["status"] = str("play")
+            current_song = urlvideo
+            print(current_song)
             self.gui.show_pages(["SoundCloudPlayer.qml", "SoundcloudSearch.qml"], 0, override_idle=True)
 
     def stop(self):

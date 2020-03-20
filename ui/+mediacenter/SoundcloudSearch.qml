@@ -16,15 +16,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.4
+import QtQuick 2.9
 import QtQuick.Layouts 1.4
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 2.2
-import org.kde.kirigami 2.4 as Kirigami
-
+import QtQuick.Controls 2.3
+import org.kde.kirigami 2.8 as Kirigami
+import org.kde.mycroft.bigscreen 1.0 as BigScreen
 import Mycroft 1.0 as Mycroft
+import "+mediacenter/views" as Views
+import "+mediacenter/delegates" as Delegates
 
-Mycroft.ScrollableDelegate {
+Mycroft.Delegate {
     id: delegate
 
     property var scSearchModel: JSON.parse(sessionData.scSearchBlob)
@@ -32,52 +34,30 @@ Mycroft.ScrollableDelegate {
     property var scCurrentTitle: sessionData.audioTitle
 
     skillBackgroundSource: "https://source.unsplash.com/1920x1080/?+music"
+    fillWidth: true
     
-    Kirigami.CardsListView {
+    Keys.onBackPressed: {
+        parent.parent.parent.currentIndex--
+        parent.parent.parent.currentItem.contentItem.forceActiveFocus()
+    }
+    
+    onFocusChanged: {
+        if(focus) {
+            relatedSongListView.view.forceActiveFocus()
+        }
+    }
+    
+    Views.TileView {
+        id: relatedSongListView
+        anchors.fill: parent
+        title: "Related Music"
+        cellWidth: view.width / 4
+        cellHeight: cellWidth / 1.8 + Kirigami.Units.gridUnit * 5
+        focus: true
         model: scSearchModel
-        delegate: Kirigami.AbstractCard {
-            showClickFeedback: true
-            Layout.fillWidth: true
-            implicitHeight: delegateItem.implicitHeight + Kirigami.Units.largeSpacing * 3
-            highlighted: modelData.url == scCurrentSongUrl ? 1 : 0
-            contentItem: Item {
-                implicitWidth: parent.implicitWidth
-                implicitHeight: parent.implicitHeight
-                z: 1000
-
-                RowLayout {
-                    id: delegateItem
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                    }
-                    spacing: Kirigami.Units.largeSpacing
-
-                    Image {
-                        id: videoImage
-                        source: modelData.thumbnail
-                        Layout.preferredHeight: Kirigami.Units.gridUnit * 3
-                        Layout.preferredWidth: Kirigami.Units.gridUnit * 3
-                        fillMode: Image.Stretch
-                    }
-
-                    Kirigami.Separator {
-                        Layout.fillHeight: true
-                        color: Kirigami.Theme.linkColor
-                    }
-
-                    Label {
-                        id: videoLabel
-                        Layout.fillWidth: true
-                        text: modelData.title
-                        wrapMode: Text.WordWrap
-                    }
-                }
-            }
-                onClicked: {
-                    triggerGuiEvent("aiix.soundcloud-audio-player.playtitle", {playtitle: modelData.title})
-            }
+        delegate: Delegates.SideAudioCard {
+            width: relatedSongListView.cellWidth
+            height: relatedSongListView.cellHeight
         }
     }
 }
