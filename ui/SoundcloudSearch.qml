@@ -33,7 +33,32 @@ Mycroft.ScrollableDelegate {
 
     skillBackgroundSource: "https://source.unsplash.com/1920x1080/?+music"
     
+    ToolButton {
+        id: topbutton
+        anchors.top: parent.top
+        anchors.topMargin: Kirigami.Units.largeSpacing
+        anchors.left: parent.left
+        anchors.leftMargin: Kirigami.Units.largeSpacing
+        width: Kirigami.Units.iconSizes.medium
+        height: Kirigami.Units.iconSizes.medium
+
+        background: Rectangle {
+            color: "transparent"
+        }
+
+        contentItem: Image {
+            width: Kirigami.Units.iconSizes.smallMedium
+            height: Kirigami.Units.iconSizes.smallMedium
+            source: "images/back.png"
+        }
+        onClicked: {
+            root.parent.backRequested()
+        }
+    }
+    
     Kirigami.CardsListView {
+        anchors.top: topbutton.bottom
+        anchors.topMargin: Kirigami.Units.largeSpacing
         model: scSearchModel
         delegate: Kirigami.AbstractCard {
             showClickFeedback: true

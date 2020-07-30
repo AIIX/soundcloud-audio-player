@@ -19,5 +19,27 @@ Mycroft.Delegate {
         nextAction: "aiix.soundcloud-audio-player.next"
         previousAction: "aiix.soundcloud-audio-player.previous"
         status: sessionData.status
+        
+        ToolButton {
+            anchors.top: parent.top
+            anchors.topMargin: Kirigami.Units.largeSpacing
+            anchors.left: parent.left
+            anchors.leftMargin: Kirigami.Units.largeSpacing
+            width: Kirigami.Units.iconSizes.medium
+            height: Kirigami.Units.iconSizes.medium
+
+            background: Rectangle {
+                color: "transparent"
+            }
+
+            contentItem: Image {
+                width: Kirigami.Units.iconSizes.smallMedium
+                height: Kirigami.Units.iconSizes.smallMedium
+                source: "images/back.png"
+            }
+            onClicked: {
+                root.parent.backRequested()
+            }
+        } 
     }
 }

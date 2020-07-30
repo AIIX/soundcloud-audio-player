@@ -1,0 +1,6 @@
+{
+    "android_icon": "/res/icon/soundcloud-skill.png",
+    "android_name": "Soundcloud",
+    "android_handler": "soundcloud-audio-player.aiix.home"
+}
+
