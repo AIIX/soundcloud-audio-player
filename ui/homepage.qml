@@ -101,6 +101,7 @@ Mycroft.Delegate {
         ColumnLayout {
             id: root
             anchors.fill: parent
+	    anchors.margins: Kirigami.Units.largeSpacing
 
             Kirigami.Heading {
                 level: 2

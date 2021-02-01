@@ -24,42 +24,77 @@ import org.kde.kirigami 2.4 as Kirigami
 
 import Mycroft 1.0 as Mycroft
 
-Mycroft.ScrollableDelegate {
-    id: delegate
+Mycroft.Delegate {
+    id: delegateSoundRel
 
     property var scSearchModel: JSON.parse(sessionData.scSearchBlob)
     property var scCurrentSongUrl: sessionData.audioSource
     property var scCurrentTitle: sessionData.audioTitle
 
     skillBackgroundSource: "https://source.unsplash.com/1920x1080/?+music"
-    
-    ToolButton {
-        id: topbutton
+    topPadding: 0
+    leftPadding: 0
+    rightPadding: 0
+    bottomPadding: 0    
+    fillWidth: true
+
+    Rectangle {
+        id: headerBar
         anchors.top: parent.top
-        anchors.topMargin: Kirigami.Units.largeSpacing
         anchors.left: parent.left
-        anchors.leftMargin: Kirigami.Units.largeSpacing
-        width: Kirigami.Units.iconSizes.medium
-        height: Kirigami.Units.iconSizes.medium
-
-        background: Rectangle {
-            color: "transparent"
+        anchors.right: parent.right
+        height: Kirigami.Units.gridUnit * 2
+        color: "#303030"
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: 2
         }
-
-        contentItem: Image {
-            width: Kirigami.Units.iconSizes.smallMedium
-            height: Kirigami.Units.iconSizes.smallMedium
-            source: "images/back.png"
-        }
-        onClicked: {
-            root.parent.backRequested()
+        
+        RowLayout {
+            width: parent.width
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            
+            ToolButton {
+                Kirigami.Theme.colorSet: Kirigami.Theme.Button
+                Layout.preferredWidth: Kirigami.Units.iconSizes.smallMedium
+                Layout.preferredHeight: Kirigami.Units.iconSizes.smallMedium
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                flat: true
+                
+                contentItem: Image {
+                    anchors.centerIn: parent
+                    width: Kirigami.Units.iconSizes.smallMedium
+                    height: Kirigami.Units.iconSizes.smallMedium
+                    source: "images/back.png"
+                }
+                
+                onClicked: {
+                    delegateSoundRel.parent.backRequested()
+                }
+            }
+            
+            Kirigami.Heading {
+                id: headingLabel
+                level: 2
+                text: "Recommended Tracks"
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
     }
     
     Kirigami.CardsListView {
-        anchors.top: topbutton.bottom
-        anchors.topMargin: Kirigami.Units.largeSpacing
+        anchors.top: headerBar.bottom
+        anchors.margins: Kirigami.Units.largeSpacing
+        height: parent.height - (headerBar.height + Kirigami.Units.largeSpacing)
+        anchors.left: parent.left
+	anchors.right: parent.right
+	clip: true
         model: scSearchModel
+	
         delegate: Kirigami.AbstractCard {
             showClickFeedback: true
             Layout.fillWidth: true
@@ -106,4 +141,5 @@ Mycroft.ScrollableDelegate {
         }
     }
 }
+
 

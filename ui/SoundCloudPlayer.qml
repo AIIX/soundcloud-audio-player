@@ -9,6 +9,7 @@ import Mycroft 1.0 as Mycroft
 Mycroft.Delegate {
     id: root
     skillBackgroundSource: sessionData.audioThumbnail
+    fillWidth: true
 
     Mycroft.AudioPlayer {
         id: soundCloudPlayer
