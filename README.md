@@ -1,5 +1,5 @@
 # <img src='https://raw.githack.com/FortAwesome/Font-Awesome/master/svgs/solid/headphones.svg' card_color='#CF3D3D' width='50' height='50' style='vertical-align:bottom'/> Soundcloud Player
-Play songs and music from soundcloud
+Play songs and music from soundcloud 
 
 ## About
 SoundCloud is a music and podcast streaming platform that lets you listen to millions of songs from around the world, This skill enables you to stream and search for your favorite soundcloud tracks on your device.
