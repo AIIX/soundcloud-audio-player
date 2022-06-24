@@ -56,7 +56,6 @@ class SoundcloudSkill(MycroftSkill):
 
     def showHome(self, message):
         self.gui.clear()
-        self.enclosure.display_manager.remove_active()
         self.displayHome()
         
     def displayHome(self):
